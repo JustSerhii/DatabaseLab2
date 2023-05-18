@@ -29,7 +29,22 @@ namespace BDLab2.Models
         public string AlbumDescription { get; set; }
         public List<int> AlbumIds { get; set; }
         public List<string> AlbumTitles{ get; set; }
-        public List<decimal> AlbumPrices { get; set; }
+        //public List<decimal> AlbumPrices { get; set; }
         public List<string> AlbumDescriptions { get; set; }
+
+        public int GenreId { get; set; }
+        public string GenreName { get; set; } 
+        public string GenreDescription { get; set; }
+        public List<int> GenreIds { get; set; }
+        public List<string> GenreNames{ get; set; }
+        public List<string> GenreDescriptions { get; set; }
+
+        public int SongId { get; set; }
+        public string SongTitle { get; set; } 
+        public int SongLength { get; set; }
+        public List<int> SongIds { get; set; }
+        public List<string> SongTitles{ get; set; }
+        public List<string> SongLengths { get; set; }
+
     }
 }

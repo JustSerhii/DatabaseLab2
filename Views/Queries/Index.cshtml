@@ -1,0 +1,52 @@
+﻿@model Query
+
+@{
+    ViewData["Title"] = "Запити";
+}
+
+<h1>Запити</h1>
+<hr />
+
+<h3>Множинні</h3>
+<hr />
+
+<p style="font-size:20px">
+    <b>Запит 1</b>
+</p>
+<p style="font-size:17px">
+    Find
+</p>
+<div class="row">
+    <div class="col-md-4">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <form asp-action="AdvancedQuery1">
+            <input type="hidden" asp-for="AlbumTitle" value="dummy" />
+            <input type="hidden" asp-for="AlbumPrice" value="0" />
+            <div class="form-group">
+                <label class="control-label">Код розробника К</label>
+                <select asp-for="ArtistId" asp-items="@ViewBag.ArtistIds" class="form-control"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Надіслати" class="btn btn-success" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<form method="get" asp-controller="Home" asp-action="Index">
+    <input type="submit" class="btn btn-primary" value="На головну" />
+</form>
+
+@section scripts
+    {
+    <script>
+        window.addEventListener("load", function () {
+            if ('@ViewBag.ErrorFlag' == 1) {
+                document.getElementById("q4").scrollIntoView();
+            }
+            else if ('@ViewBag.ErrorFlag' == 2) {
+                document.getElementById("q5").scrollIntoView();
+            }
+        });
+    </script>
+}
