@@ -57,6 +57,76 @@
 </div>
 <hr />
 
+<p style="font-size:20px">
+    <b>Запит 3</b>
+</p>
+<p style="font-size:17px">
+    Знайти імена артистів, які не мають альбомів з назвою Н.
+</p>
+<div class="row">
+    <div class="col-md-4">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <form asp-action="SimpleQuery3">
+            <input type="hidden" asp-for="AlbumPrice" value="0" />
+            <div class="form-group">
+                <label class="control-label">Назва Н</label>
+                <select asp-for="AlbumTitle" asp-items="@ViewBag.AlbumTitles" class="form-control"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Надіслати" class="btn btn-success" />
+            </div>
+        </form>
+    </div>
+</div>
+<hr />
+
+<p style="font-size:20px">
+    <b>Запит 4</b>
+</p>
+<p style="font-size:17px">
+    Знайти назви та ціни всіх альбомів усіх артистів з лейблу X.
+</p>
+<div class="row">
+    <div class="col-md-4">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <form asp-action="SimpleQuery4">
+            <input type="hidden" asp-for="AlbumTitle" value="dummy" />
+            <input type="hidden" asp-for="AlbumPrice" value="0" />
+            <div class="form-group">
+                <label class="control-label">Назва країни К</label>
+                <select asp-for="LabelName" asp-items="@ViewBag.Labels" class="form-control"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Надіслати" class="btn btn-success" />
+            </div>
+        </form>
+    </div>
+</div>
+<hr />
+
+<p style="font-size:20px">
+    <b>Запит 5</b>
+</p>
+<p style="font-size:17px">
+    Знайти назви жанрів, у яких написана хоча б одна пісня з альбомів артиста на імя X
+</p>
+<div class="row">
+    <div class="col-md-4">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <form asp-action="SimpleQuery5">
+            <input type="hidden" asp-for="AlbumTitle" value="dummy" />
+            <div class="form-group">
+                <label class="control-label">Ім'я розробника Р</label>
+                <select asp-for="ArtistName" asp-items="@ViewBag.ArtistNames" class="form-control"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Надіслати" class="btn btn-success" />
+            </div>
+        </form>
+    </div>
+</div>
+<hr />
+
 <h3>Множинні</h3>
 <hr />
 

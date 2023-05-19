@@ -11,14 +11,14 @@
     @if (Model.QueryId.Equals("S1"))
     {
         <p style="font-size:20px">
-            <b>Середня ціна продуктів розробника @Model.ArtistName:</b> @decimal.Round(Model.AvgPrice, 2, MidpointRounding.AwayFromZero)
+            <b>Середня ціна альбомів артиста @Model.ArtistName:</b> @decimal.Round(Model.AvgPrice, 2, MidpointRounding.AwayFromZero)
         </p>
     }
 
     else if (Model.QueryId.Equals("S2"))
     {
         <p style="font-size:20px">
-            <b>Назви всіх продуктів виробника з ім'ям @Model.ArtistName</b>
+            <b>Назви всіх альобмів артиста з ім'ям @Model.ArtistName</b>
         </p>
         <table class="table">
             <thead>
@@ -34,6 +34,90 @@
                     <tr>
                         <td>
                             @Model.AlbumTitles[i]
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    else if (Model.QueryId.Equals("S3"))
+    {
+        <p style="font-size:20px">
+            <b>Імена артистів, які не мають альбомів з назвою @Model.AlbumTitle</b>
+        </p>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Ім'я/назва
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.ArtistNames.Count; i++)
+                {
+                    <tr>
+                        <td>
+                            @Model.ArtistNames[i]
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    else if (Model.QueryId.Equals("S4"))
+    {
+        <p style="font-size:20px">
+            <b>Назви та ціни всіх альбомів усіх артистів з лейблу @Model.LabelName</b>
+        </p>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Назва
+                    </th>
+                    <th>
+                        Ціна
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.AlbumTitles.Count; i++)
+                {
+                    <tr>
+                        <td>
+                            @Model.AlbumTitles[i]
+                        </td>
+                        <td>
+                            @decimal.Round(Model.AlbumPrices[i], 2, MidpointRounding.AwayFromZero)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    else if (Model.QueryId.Equals("S5"))
+    {
+        <p style="font-size:20px">
+            <b>Назви жанрів, у якому написана хоча б одна пісня з альбомів артиста на імя @Model.ArtistName</b>
+        </p>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Ім'я
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.GenreNames.Count; i++)
+                {
+                    <tr>
+                        <td>
+                            @Model.GenreNames[i]
                         </td>
                     </tr>
                 }
