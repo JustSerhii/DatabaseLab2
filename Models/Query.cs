@@ -46,5 +46,6 @@ namespace BDLab2.Models
         public List<string> SongTitles{ get; set; }
         public List<string> SongLengths { get; set; }
 
+        public decimal AvgPrice { get; set; }
     }
 }

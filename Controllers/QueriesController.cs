@@ -18,9 +18,13 @@ namespace BDLab2.Controllers
     {
 
         private const string C1_PATH = @"C:\Users\ks\Desktop\projects visual\BDLab2\Requests\C1.sql";
-        private const string CONN_STR = "Server=DESKTOP-R04J9T9\\SQLEXPRESS;Database=MusicDB;Trusted_Connection=True;MultipleActiveResultSets=true";
+        private const string S1_PATH = @"C:\Users\ks\Desktop\projects visual\BDLab2\Requests\S1.sql";
+        private const string S2_PATH = @"C:\Users\ks\Desktop\projects visual\BDLab2\Requests\S2.sql";
+        private const string CONN_STR = "Server=DESKTOP-R04J9T9\\SQLEXPRESS;Database=MusicDB;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate = true";
 
+        private const string ERR_AVG = "No products";
         private const string ERR_LABEL = "No Labels";
+        private const string ERR_PROD = "No such albums";
 
         private readonly MusicDbContext _context;
         public QueriesController(MusicDbContext context)
@@ -56,10 +60,49 @@ namespace BDLab2.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        public IActionResult SimpleQuery2(Models.Query queryModel) //1. Знайти альбоми артиста Z
+        {
+            string query = System.IO.File.ReadAllText(S2_PATH);
+            query = query.Replace("Z", "N\'" + queryModel.ArtistName + "\'");
+            query = query.Replace("\r\n", " ");
+            query = query.Replace('\t', ' ');
+
+            queryModel.QueryId = "S2";
+            queryModel.AlbumTitles = new List<string>();
+
+            using (var connection = new SqlConnection(CONN_STR))
+            {
+                connection.Open();
+                using (var command = new SqlCommand(query, connection))
+                {
+                    command.ExecuteNonQuery();
+                    using (var reader = command.ExecuteReader())
+                    {
+                        int flag = 0;
+                        while (reader.Read())
+                        {
+                            queryModel.AlbumTitles.Add(reader.GetString(0));
+                            flag++;
+                        }
+
+                        if (flag == 0)
+                        {
+                            queryModel.ErrorFlag = 1;
+                            queryModel.Error = ERR_PROD;
+                        }
+                    }
+                }
+                connection.Close();
+            }
+            return RedirectToAction("Result", queryModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult AdvancedQuery1(Models.Query queryModel)
         {
             string query = System.IO.File.ReadAllText(C1_PATH);
-            query = query.Replace("K", queryModel.ArtistId.ToString());
+            query = query.Replace("Z", queryModel.ArtistId.ToString());
             query = query.Replace("\r\n", " ");
             query = query.Replace('\t', ' ');
             queryModel.QueryId = "C1";
@@ -91,6 +134,40 @@ namespace BDLab2.Controllers
             }
             return RedirectToAction("Result", queryModel);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult SimpleQuery1(Models.Query queryModel)
+        {
+            string query = System.IO.File.ReadAllText(S1_PATH);
+            query = query.Replace("Z", "N\'" + queryModel.ArtistName + "\'");
+            query = query.Replace("\r\n", " ");
+            query = query.Replace('\t', ' ');
+
+            queryModel.QueryId = "S1";
+
+            using (var connection = new SqlConnection(CONN_STR))
+            {
+                connection.Open();
+                using (var command = new SqlCommand(query, connection))
+                {
+                    var result = command.ExecuteScalar();
+                    if (result != DBNull.Value)
+                    {
+                        queryModel.AvgPrice = Convert.ToDecimal(result);
+                    }
+                    else
+                    {
+                        queryModel.ErrorFlag = 1;
+                        queryModel.Error = ERR_AVG;
+                    }
+                }
+                connection.Close();
+            }
+            return RedirectToAction("Result", queryModel);
+        }
+
+
         public IActionResult Result(Models.Query queryResult)
         {
             return View(queryResult);

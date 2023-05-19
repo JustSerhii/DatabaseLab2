@@ -8,7 +8,40 @@
 <hr />
 @if (string.IsNullOrEmpty(Model.Error))
 {
-    if (Model.QueryId.Equals("A1"))
+    @if (Model.QueryId.Equals("S1"))
+    {
+        <p style="font-size:20px">
+            <b>Середня ціна продуктів розробника @Model.ArtistName:</b> @decimal.Round(Model.AvgPrice, 2, MidpointRounding.AwayFromZero)
+        </p>
+    }
+
+    else if (Model.QueryId.Equals("S2"))
+    {
+        <p style="font-size:20px">
+            <b>Назви всіх продуктів виробника з ім'ям @Model.ArtistName</b>
+        </p>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Назва
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.AlbumTitles.Count; i++)
+                {
+                    <tr>
+                        <td>
+                            @Model.AlbumTitles[i]
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    else if (Model.QueryId.Equals("C1"))
     {
         <p style="font-size:20px">
             <b>dwdwdawdwadwadsadwdsad @Model.ArtistId</b>

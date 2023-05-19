@@ -7,6 +7,56 @@
 <h1>Запити</h1>
 <hr />
 
+<h3>Прості</h3>
+<hr />
+
+<p style="font-size:20px">
+    <b>Запит 1</b>
+</p>
+<p style="font-size:17px">
+    Знайти середню вартість альбомів артиста P
+</p>
+<div class="row">
+    <div class="col-md-4">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <form asp-action="SimpleQuery1">
+            <input type="hidden" asp-for="AlbumTitle" value="dummy" />
+            <input type="hidden" asp-for="AlbumPrice" value="0" />
+            <div class="form-group">
+                <label class="control-label">Назва артиста Р</label>
+                <select asp-for="ArtistName" asp-items="@ViewBag.ArtistNames" class="form-control"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Надіслати" class="btn btn-success" />
+            </div>
+        </form>
+    </div>
+</div>
+<hr />
+
+<p style="font-size:20px">
+    <b>Запит 2</b>
+</p>
+<p style="font-size:17px">
+    Знайти всі альбоми артиста Z:
+</p>
+<div class="row">
+    <div class="col-md-4">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <form asp-action="SimpleQuery2">
+            <input type="hidden" asp-for="AlbumTitle" value="dummy" />
+            <div class="form-group">
+                <label class="control-label">Назва артиста Z</label>
+                <select asp-for="ArtistName" asp-items="@ViewBag.ArtistNames" class="form-control"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Надіслати" class="btn btn-success" />
+            </div>
+        </form>
+    </div>
+</div>
+<hr />
+
 <h3>Множинні</h3>
 <hr />
 
@@ -14,7 +64,7 @@
     <b>Запит 1</b>
 </p>
 <p style="font-size:17px">
-    Find
+    Знайти назви лейблів, артисти з яких продають альбоми принаймні за всіма тими цінами, що й артист із кодом Z.
 </p>
 <div class="row">
     <div class="col-md-4">
@@ -23,7 +73,7 @@
             <input type="hidden" asp-for="AlbumTitle" value="dummy" />
             <input type="hidden" asp-for="AlbumPrice" value="0" />
             <div class="form-group">
-                <label class="control-label">Код розробника К</label>
+                <label class="control-label">Код артиста Z</label>
                 <select asp-for="ArtistId" asp-items="@ViewBag.ArtistIds" class="form-control"></select>
             </div>
             <div class="form-group">

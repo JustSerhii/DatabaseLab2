@@ -9,8 +9,8 @@ WHERE Labels.Id IN
 		 WHERE NOT EXISTS
 	 		((SELECT Albums.Price
 			  FROM Albums
-		      WHERE Albums.ArtistId = K)
+		      WHERE Albums.ArtistId = Z)
 		     EXCEPT
 		     (SELECT Albums.Price
 		      FROM Albums
-		      WHERE Albums.ArtistId = A.id AND Albums.ArtistId != K))));
+		      WHERE Albums.ArtistId = A.Id AND Albums.ArtistId != Z))));
