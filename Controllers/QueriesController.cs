@@ -18,6 +18,8 @@ namespace BDLab2.Controllers
     {
 
         private const string C1_PATH = @"C:\Users\ks\Desktop\projects visual\BDLab2\Requests\C1.sql";
+        private const string C2_PATH = @"C:\Users\ks\Desktop\projects visual\BDLab2\Requests\C2.sql";
+        private const string C3_PATH = @"C:\Users\ks\Desktop\projects visual\BDLab2\Requests\C3.sql";
         private const string S1_PATH = @"C:\Users\ks\Desktop\projects visual\BDLab2\Requests\S1.sql";
         private const string S2_PATH = @"C:\Users\ks\Desktop\projects visual\BDLab2\Requests\S2.sql";
         private const string S3_PATH = @"C:\Users\ks\Desktop\projects visual\BDLab2\Requests\S3.sql";
@@ -63,7 +65,7 @@ namespace BDLab2.Controllers
             ViewBag.ArtistIds = anyArtists ? new SelectList(_context.Artists, "Id", "Id") : empty;
             ViewBag.ArtistNames = anyArtists ? new SelectList(_context.Artists, "Name", "Name") : empty;
             ViewBag.GenreNames = anyGenres ? new SelectList(customers) : empty;
-            ViewBag.GenreDescriptions = anyGenres ? new SelectList(_context.Genres, "GenreDescription", "GenreDescription") : empty;
+            ViewBag.GenreDescriptions = anyGenres ? new SelectList(_context.Genres, "Description", "Description") : empty;
             ViewBag.Labels = _context.Labels.Any() ? new SelectList(_context.Labels, "Name", "Name") : empty;
 
             ViewBag.AlbumTitles = anyAlbums ? new SelectList(_context.Albums, "Title", "Title") : empty;
@@ -102,6 +104,83 @@ namespace BDLab2.Controllers
                         {
                             queryModel.ErrorFlag = 1;
                             queryModel.Error = ERR_LABEL;
+                        }
+                    }
+                }
+                connection.Close();
+            }
+            return RedirectToAction("Result", queryModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AdvancedQuery2(Models.Query queryModel)
+        {
+            string query = System.IO.File.ReadAllText(C2_PATH);
+            query = query.Replace("Z", "N\'" + queryModel.GenreName.ToString() + "\'");
+            query = query.Replace("\r\n", " ");
+            query = query.Replace('\t', ' ');
+            queryModel.QueryId = "C2";
+            queryModel.GenreDescriptions = new List<string>();
+
+            using (var connection = new SqlConnection(CONN_STR))
+            {
+                connection.Open();
+                using (var command = new SqlCommand(query, connection))
+                {
+                    command.ExecuteNonQuery();
+                    using (var reader = command.ExecuteReader())
+                    {
+                        int flag = 0;
+                        while (reader.Read())
+                        {
+                            queryModel.GenreDescriptions.Add(reader.GetString(0));
+                            flag++;
+                        }
+
+                        if (flag == 0)
+                        {
+                            queryModel.ErrorFlag = 1;
+                            queryModel.Error = ERR_GEN;
+                        }
+                    }
+                }
+                connection.Close();
+            }
+            return RedirectToAction("Result", queryModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AdvancedQuery3(Models.Query queryModel)
+        {
+            
+            string query = System.IO.File.ReadAllText(C3_PATH);
+            query = query.Replace("Y", "N\'" + queryModel.GenreDescription.ToString() + "\'");
+            query = query.Replace("\r\n", " ");
+            query = query.Replace('\t', ' ');
+            queryModel.QueryId = "C3";
+            queryModel.GenreNames = new List<string>();
+
+            using (var connection = new SqlConnection(CONN_STR))
+            {
+                connection.Open();
+                using (var command = new SqlCommand(query, connection))
+                {
+                    command.ExecuteNonQuery();
+                    using (var reader = command.ExecuteReader())
+                    {
+                        int flag = 0;
+                        while (reader.Read())
+                        {
+                            queryModel.GenreNames.Add(reader.GetString(0));
+                            flag++;
+                        }
+
+                        if (flag == 0)
+                        {
+                            queryModel.ErrorFlag = 1;
+                            queryModel.Error = ERR_GEN;
                         }
                     }
                 }

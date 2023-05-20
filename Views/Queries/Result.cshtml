@@ -50,7 +50,7 @@
             <thead>
                 <tr>
                     <th>
-                        Ім'я/назва
+                        Назва
                     </th>
                 </tr>
             </thead>
@@ -108,7 +108,7 @@
             <thead>
                 <tr>
                     <th>
-                        Ім'я
+                        Назва
                     </th>
                 </tr>
             </thead>
@@ -128,7 +128,7 @@
     else if (Model.QueryId.Equals("C1"))
     {
         <p style="font-size:20px">
-            <b>dwdwdawdwadwadsadwdsad @Model.ArtistId</b>
+            <b>Назви лейблів, артисти з яких продають альбоми принаймні за всіма тими цінами, що й артист із кодом @Model.ArtistId</b>
         </p>
         <table class="table">
             <thead>
@@ -144,6 +144,57 @@
                     <tr>
                         <td>
                             @Model.LabelNames[i]
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    else if (Model.QueryId.Equals("C2"))
+    {
+        <p style="font-size:20px">
+            <b>Описи жанрів, які використовуються у точно тих самих альбомах, що й жанр з назвою @Model.GenreName</b>
+        </p>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Опис
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.GenreDescriptions.Count; i++)
+                {
+                    <tr>
+                        <td>
+                            @Model.GenreDescriptions[i]
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else if (Model.QueryId.Equals("C3"))
+    {
+        <p style="font-size:20px">
+            <b>Назви жанрів з описом @Model.GenreDescription, які використовуються на всіх альбомах</b>
+        </p>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Назва
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.GenreNames.Count; i++)
+                {
+                    <tr>
+                        <td>
+                            @Model.GenreNames[i]
                         </td>
                     </tr>
                 }
