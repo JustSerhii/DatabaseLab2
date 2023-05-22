@@ -59,11 +59,29 @@ namespace BDLab2.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (_context.Genres.Any(g => g.Name == genre.Name))
+                {
+                    ModelState.AddModelError("Name", "A genre with the same name already exists.");
+                    return View(genre);
+                }
+
+                if (IsNumeric(genre.Name) || IsNumeric(genre.Description))
+                {
+                    ModelState.AddModelError("", "Genre name and description cannot be just a number.");
+                    return View(genre);
+                }
+
                 _context.Add(genre);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             return View(genre);
+        }
+
+        private bool IsNumeric(string value)
+        {
+            return double.TryParse(value, out _);
         }
 
         // GET: Genres/Edit/5
@@ -96,6 +114,18 @@ namespace BDLab2.Controllers
 
             if (ModelState.IsValid)
             {
+                if (_context.Genres.Any(g => g.Id != genre.Id && g.Name == genre.Name))
+                {
+                    ModelState.AddModelError("Name", "A genre with the same name already exists.");
+                    return View(genre);
+                }
+
+                if (IsNumeric(genre.Name) || IsNumeric(genre.Description))
+                {
+                    ModelState.AddModelError("", "Genre name and description cannot be just a number.");
+                    return View(genre);
+                }
+
                 try
                 {
                     _context.Update(genre);
@@ -112,8 +142,10 @@ namespace BDLab2.Controllers
                         throw;
                     }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
+
             return View(genre);
         }
 

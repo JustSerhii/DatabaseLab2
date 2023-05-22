@@ -93,7 +93,7 @@
             <input type="hidden" asp-for="AlbumTitle" value="dummy" />
             <input type="hidden" asp-for="AlbumPrice" value="0" />
             <div class="form-group">
-                <label class="control-label">Назва жанру К</label>
+                <label class="control-label">Назва лейблу К</label>
                 <select asp-for="LabelName" asp-items="@ViewBag.Labels" class="form-control"></select>
             </div>
             <div class="form-group">
@@ -116,7 +116,7 @@
         <form asp-action="SimpleQuery5">
             <input type="hidden" asp-for="AlbumTitle" value="dummy" />
             <div class="form-group">
-                <label class="control-label">Назва артиста Р</label>
+                <label class="control-label">Ім'я артиста X</label>
                 <select asp-for="ArtistName" asp-items="@ViewBag.ArtistNames" class="form-control"></select>
             </div>
             <div class="form-group">
@@ -167,7 +167,7 @@
             <input type="hidden" asp-for="AlbumTitle" value="dummy" />
             <input type="hidden" asp-for="AlbumPrice" value="0" />
             <div class="form-group">
-                <label class="control-label">Email Z</label>
+                <label class="control-label">Жанр з назвою Z</label>
                 <select asp-for="GenreName" asp-items="@ViewBag.GenreNames" class="form-control"></select>
             </div>
             <div class="form-group">
@@ -182,7 +182,7 @@
     <b>Запит 3</b>
 </p>
 <p style="font-size:17px">
-    Знайти описи жанрів з назвою X, які використовуються на усіх альбомах
+    Знайти назви жанрів з описом X, які використовуються на усіх альбомах
 </p>
 <div class="row">
     <div class="col-md-4">
@@ -191,7 +191,7 @@
             <input type="hidden" asp-for="AlbumTitle" value="dummy" />
             <input type="hidden" asp-for="AlbumPrice" value="0" />
             <div class="form-group">
-                <label class="control-label">Ім'я І</label>
+                <label class="control-label">Опис X</label>
                 <select asp-for="GenreDescription" asp-items="@ViewBag.GenreDescriptions" class="form-control"></select>
             </div>
             <div class="form-group">

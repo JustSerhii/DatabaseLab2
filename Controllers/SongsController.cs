@@ -48,8 +48,8 @@ namespace BDLab2.Controllers
         // GET: Songs/Create
         public IActionResult Create()
         {
-            ViewData["AlbumId"] = new SelectList(_context.Albums, "Id", "Id");
-            ViewData["GenreId"] = new SelectList(_context.Genres, "Id", "Id");
+            ViewData["AlbumId"] = new SelectList(_context.Albums, "Id", "Title");
+            ViewData["GenreId"] = new SelectList(_context.Genres, "Id", "Name");
             return View();
         }
 
@@ -62,12 +62,19 @@ namespace BDLab2.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(song);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (song.Length < 1 || song.Length > 20000)
+                {
+                    ModelState.AddModelError("Length", "The length must be between 1 and 20,000.");
+                }
+                else
+                {
+                    _context.Add(song);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
             }
-            ViewData["AlbumId"] = new SelectList(_context.Albums, "Id", "Id", song.AlbumId);
-            ViewData["GenreId"] = new SelectList(_context.Genres, "Id", "Id", song.GenreId);
+            ViewData["AlbumId"] = new SelectList(_context.Albums, "Id", "Title", song.AlbumId);
+            ViewData["GenreId"] = new SelectList(_context.Genres, "Id", "Name", song.GenreId);
             return View(song);
         }
 
@@ -84,8 +91,8 @@ namespace BDLab2.Controllers
             {
                 return NotFound();
             }
-            ViewData["AlbumId"] = new SelectList(_context.Albums, "Id", "Id", song.AlbumId);
-            ViewData["GenreId"] = new SelectList(_context.Genres, "Id", "Id", song.GenreId);
+            ViewData["AlbumId"] = new SelectList(_context.Albums, "Id", "Title", song.AlbumId);
+            ViewData["GenreId"] = new SelectList(_context.Genres, "Id", "Name", song.GenreId);
             return View(song);
         }
 
@@ -103,26 +110,33 @@ namespace BDLab2.Controllers
 
             if (ModelState.IsValid)
             {
-                try
+                if (song.Length < 1 || song.Length > 20000)
                 {
-                    _context.Update(song);
-                    await _context.SaveChangesAsync();
+                    ModelState.AddModelError("Length", "The length must be between 1 and 20,000.");
                 }
-                catch (DbUpdateConcurrencyException)
+                else
                 {
-                    if (!SongExists(song.Id))
+                    try
                     {
-                        return NotFound();
+                        _context.Update(song);
+                        await _context.SaveChangesAsync();
                     }
-                    else
+                    catch (DbUpdateConcurrencyException)
                     {
-                        throw;
+                        if (!SongExists(song.Id))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
                     }
+                    return RedirectToAction(nameof(Index));
                 }
-                return RedirectToAction(nameof(Index));
             }
-            ViewData["AlbumId"] = new SelectList(_context.Albums, "Id", "Id", song.AlbumId);
-            ViewData["GenreId"] = new SelectList(_context.Genres, "Id", "Id", song.GenreId);
+            ViewData["AlbumId"] = new SelectList(_context.Albums, "Id", "Title", song.AlbumId);
+            ViewData["GenreId"] = new SelectList(_context.Genres, "Id", "Name", song.GenreId);
             return View(song);
         }
 

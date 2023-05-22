@@ -59,6 +59,13 @@ namespace BDLab2.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (_context.Labels.Any(l => l.Name == label.Name))
+                {
+                    ModelState.AddModelError("Name", "A label with the same name already exists.");
+                    return View(label);
+                }
+
+
                 _context.Add(label);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -96,6 +103,12 @@ namespace BDLab2.Controllers
 
             if (ModelState.IsValid)
             {
+                if (_context.Labels.Any(l => l.Id != label.Id && l.Name == label.Name))
+                {
+                    ModelState.AddModelError("Name", "A label with the same name already exists.");
+                    return View(label);
+                }
+
                 try
                 {
                     _context.Update(label);

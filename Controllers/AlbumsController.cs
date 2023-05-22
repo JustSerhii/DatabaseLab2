@@ -47,7 +47,7 @@ namespace BDLab2.Controllers
         // GET: Albums/Create
         public IActionResult Create()
         {
-            ViewData["ArtistId"] = new SelectList(_context.Artists, "Id", "Id");
+            ViewData["ArtistId"] = new SelectList(_context.Artists, "Id", "Name");
             return View();
         }
 
@@ -60,11 +60,18 @@ namespace BDLab2.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(album);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (album.Price <= 0 || album.Price > 100000)
+                {
+                    ModelState.AddModelError("Price", "The price must be between 0 and 100,000.");
+                }
+                else
+                {
+                    _context.Add(album);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
             }
-            ViewData["ArtistId"] = new SelectList(_context.Artists, "Id", "Id", album.ArtistId);
+            ViewData["ArtistId"] = new SelectList(_context.Artists, "Id", "Name", album.ArtistId);
             return View(album);
         }
 
@@ -81,7 +88,7 @@ namespace BDLab2.Controllers
             {
                 return NotFound();
             }
-            ViewData["ArtistId"] = new SelectList(_context.Artists, "Id", "Id", album.ArtistId);
+            ViewData["ArtistId"] = new SelectList(_context.Artists, "Id", "Name", album.ArtistId);
             return View(album);
         }
 
@@ -99,25 +106,32 @@ namespace BDLab2.Controllers
 
             if (ModelState.IsValid)
             {
-                try
+                if (album.Price <= 0 || album.Price > 100000)
                 {
-                    _context.Update(album);
-                    await _context.SaveChangesAsync();
+                    ModelState.AddModelError("Price", "The price must be between 0 and 100,000.");
                 }
-                catch (DbUpdateConcurrencyException)
+                else
                 {
-                    if (!AlbumExists(album.Id))
+                    try
                     {
-                        return NotFound();
+                        _context.Update(album);
+                        await _context.SaveChangesAsync();
                     }
-                    else
+                    catch (DbUpdateConcurrencyException)
                     {
-                        throw;
+                        if (!AlbumExists(album.Id))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
                     }
+                    return RedirectToAction(nameof(Index));
                 }
-                return RedirectToAction(nameof(Index));
             }
-            ViewData["ArtistId"] = new SelectList(_context.Artists, "Id", "Id", album.ArtistId);
+            ViewData["ArtistId"] = new SelectList(_context.Artists, "Id", "Name", album.ArtistId);
             return View(album);
         }
 
