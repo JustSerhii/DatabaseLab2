@@ -47,7 +47,7 @@ namespace BDLab2.Controllers
         // GET: Artists/Create
         public IActionResult Create()
         {
-            ViewData["LabelId"] = new SelectList(_context.Labels, "Id", "Id");
+            ViewData["LabelId"] = new SelectList(_context.Labels, "Id", "Name");
             return View();
         }
 
@@ -64,7 +64,7 @@ namespace BDLab2.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["LabelId"] = new SelectList(_context.Labels, "Id", "Id", artist.LabelId);
+            ViewData["LabelId"] = new SelectList(_context.Labels, "Id", "Name", artist.LabelId);
             return View(artist);
         }
 
@@ -81,7 +81,7 @@ namespace BDLab2.Controllers
             {
                 return NotFound();
             }
-            ViewData["LabelId"] = new SelectList(_context.Labels, "Id", "Id", artist.LabelId);
+            ViewData["LabelId"] = new SelectList(_context.Labels, "Id", "Name", artist.LabelId);
             return View(artist);
         }
 
@@ -117,7 +117,7 @@ namespace BDLab2.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["LabelId"] = new SelectList(_context.Labels, "Id", "Id", artist.LabelId);
+            ViewData["LabelId"] = new SelectList(_context.Labels, "Id", "Name", artist.LabelId);
             return View(artist);
         }
 
@@ -154,14 +154,14 @@ namespace BDLab2.Controllers
             {
                 _context.Artists.Remove(artist);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ArtistExists(int id)
         {
-          return (_context.Artists?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Artists?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

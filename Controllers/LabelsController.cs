@@ -139,6 +139,7 @@ namespace BDLab2.Controllers
             }
 
             var label = await _context.Labels
+                .Include(l => l.Artists) 
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (label == null)
             {
@@ -157,13 +158,17 @@ namespace BDLab2.Controllers
             {
                 return Problem("Entity set 'MusicDbContext.Labels'  is null.");
             }
-            var label = await _context.Labels.FindAsync(id);
+            var label = await _context.Labels
+                .Include(l => l.Artists) // Include the related songs
+                .FirstOrDefaultAsync(l => l.Id == id);
+
             if (label != null)
             {
+                _context.Artists.RemoveRange(label.Artists); // Remove the related songs
                 _context.Labels.Remove(label);
+                await _context.SaveChangesAsync();
             }
             
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

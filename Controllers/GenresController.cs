@@ -158,6 +158,7 @@ namespace BDLab2.Controllers
             }
 
             var genre = await _context.Genres
+                .Include(g => g.Songs) // Include the related songs
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (genre == null)
             {
@@ -176,13 +177,17 @@ namespace BDLab2.Controllers
             {
                 return Problem("Entity set 'MusicDbContext.Genres'  is null.");
             }
-            var genre = await _context.Genres.FindAsync(id);
+            var genre = await _context.Genres
+                .Include(g => g.Songs) // Include the related songs
+                .FirstOrDefaultAsync(g => g.Id == id);
+
             if (genre != null)
             {
+                _context.Songs.RemoveRange(genre.Songs); // Remove the related songs
                 _context.Genres.Remove(genre);
+                await _context.SaveChangesAsync();
             }
             
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

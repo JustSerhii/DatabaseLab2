@@ -145,6 +145,7 @@ namespace BDLab2.Controllers
 
             var album = await _context.Albums
                 .Include(a => a.Artist)
+                .Include(a => a.Songs) // Include the related songs
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (album == null)
             {
@@ -161,15 +162,20 @@ namespace BDLab2.Controllers
         {
             if (_context.Albums == null)
             {
-                return Problem("Entity set 'MusicDbContext.Albums'  is null.");
+                return Problem("Entity set 'MusicDbContext.Albums' is null.");
             }
-            var album = await _context.Albums.FindAsync(id);
+
+            var album = await _context.Albums
+                .Include(a => a.Songs) // Include the related songs
+                .FirstOrDefaultAsync(a => a.Id == id);
+
             if (album != null)
             {
+                _context.Songs.RemoveRange(album.Songs); // Remove the related songs
                 _context.Albums.Remove(album);
+                await _context.SaveChangesAsync();
             }
-            
-            await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
         }
 
